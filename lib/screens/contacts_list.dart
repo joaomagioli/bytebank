@@ -11,26 +11,37 @@ class ContactList extends StatelessWidget {
         title: Text('Contacts'),
       ),
       body: FutureBuilder<List<Contact>>(
-          future:
-              Future.delayed(Duration(seconds: 1)).then((value) => findAll()),
+          initialData: [],
+          future: findAll(),
           builder: (context, snapshot) {
-            final List<Contact>? contacts = snapshot.data;
-            if (contacts != null) {
-              return ListView.builder(
-                itemCount: contacts.length,
-                itemBuilder: (context, index) {
-                  final Contact contact = contacts[index];
-                  return _ContactItem(contact);
-                },
-              );
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+                break;
+              case ConnectionState.waiting:
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [CircularProgressIndicator(), Text("Loading")],
+                  ),
+                );
+                break;
+              case ConnectionState.active:
+                break;
+              case ConnectionState.done:
+                final List<Contact>? contacts = snapshot.data;
+                if (contacts != null) {
+                  ListView.builder(
+                    itemCount: contacts.length,
+                    itemBuilder: (context, index) {
+                      final Contact contact = contacts[index];
+                      return _ContactItem(contact);
+                    },
+                  );
+                }
+                break;
             }
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [CircularProgressIndicator(), Text("Loading")],
-              ),
-            );
+            return Container();
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
