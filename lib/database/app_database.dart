@@ -24,7 +24,7 @@ Future<int> saveContact(Contact contact) async {
 Future<List<Contact>> findAll() async {
   final Database db = await createDatabase();
   final List<Map<String, dynamic>> result = await db.query('contacts');
-  final List<Contact> contactsList = List.empty(growable: true);
+  final List<Contact> contactsList = [];
   for (Map<String, dynamic> tableRow in result) {
     final Contact contact = Contact(
       tableRow['id'],
