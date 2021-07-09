@@ -14,14 +14,14 @@ class _ContactFormState extends State<ContactForm> {
 
   @override
   Widget build(BuildContext context) {
-    throw Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text('New contact'),
       ),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _nameController,
               decoration: InputDecoration(labelText: 'Full name'),
@@ -29,7 +29,7 @@ class _ContactFormState extends State<ContactForm> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 16.0),
+            padding: const EdgeInsets.all(8.0),
             child: TextField(
                 controller: _accountNameController,
                 decoration: InputDecoration(labelText: 'Account number'),
@@ -47,7 +47,7 @@ class _ContactFormState extends State<ContactForm> {
                             int.tryParse(_accountNameController.text);
                         final Contact contact = Contact(0, name, accountNumber);
                         saveContact(contact)
-                            .then((id) => Navigator.pop(context, contact));
+                            .then((id) => Navigator.pop(context));
                       },
                       child: Text('create'))))
         ],
