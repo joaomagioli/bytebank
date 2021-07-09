@@ -15,7 +15,7 @@ class _ContactListState extends State<ContactList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contacts'),
+        title: Text('Transfer'),
       ),
       body: FutureBuilder<List<Contact>>(
           initialData: [],
@@ -38,7 +38,7 @@ class _ContactListState extends State<ContactList> {
               case ConnectionState.done:
                 final List<Contact>? contacts = snapshot.data;
                 if (contacts != null) {
-                  ListView.builder(
+                  return ListView.builder(
                     itemCount: contacts.length,
                     itemBuilder: (context, index) {
                       final Contact contact = contacts[index];
@@ -48,7 +48,7 @@ class _ContactListState extends State<ContactList> {
                 }
                 break;
             }
-            return Container();
+            return Text("Unknown Error");
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
