@@ -80,5 +80,5 @@ void _showContactsList(BuildContext context) {
 
 void _showTransactionList(BuildContext context) {
   Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => TransactionsList()));
+      .push(MaterialPageRoute(builder: (context) => TransactionList()));
 }
