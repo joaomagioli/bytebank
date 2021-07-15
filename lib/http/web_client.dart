@@ -11,7 +11,7 @@ Future<List<Transaction>> getAllTransactions() async {
   final Client client =
       InterceptedClient.build(interceptors: [LoggingInterceptor()]);
   final Response response =
-      await client.get(Uri.parse('http://192.168.15.133:8080/transactions'));
+      await client.get(Uri.parse('http://192.168.15.107:8080/transactions'));
   final List<dynamic> decodedJson = jsonDecode(response.body);
   final List<Transaction> transactions = [];
   _handleResponse(decodedJson, transactions);
