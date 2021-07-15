@@ -1,4 +1,5 @@
 import 'package:bytebank/components/Progress.dart';
+import 'package:bytebank/components/centered_message.dart';
 import 'package:bytebank/http/web_client.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:flutter/material.dart';
@@ -57,9 +58,10 @@ class _TransactionListState extends State<TransactionList> {
                     itemCount: transactions.length,
                   );
                 }
+                return CenteredMessage('No transactions found', icon: Icons.warning);
                 break;
             }
-            return Text("Unknown Error");
+            return CenteredMessage("Unknown Error");
           },
         ));
   }
