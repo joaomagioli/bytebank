@@ -1,17 +1,17 @@
 import 'dart:convert';
+import 'package:bytebank/http/logging_interceptor.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http/http.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 
-// This method uses my local ip to fetch data.
-// The api was provided by Alura as a local project
+final Client client =
+    InterceptedClient.build(interceptors: [LoggingInterceptor()]);
+const String baseUrl = 'http://192.168.15.107:8080/transactions';
+
 Future<List<Transaction>> getAllTransactions() async {
-  final Client client =
-      InterceptedClient.build(interceptors: [LoggingInterceptor()]);
-  final Response response =
-      await client.get(Uri.parse('http://192.168.15.107:8080/transactions'));
+  final Response response = await client.get(Uri.parse(baseUrl));
   final List<dynamic> decodedJson = jsonDecode(response.body);
   final List<Transaction> transactions = [];
   _handleResponse(decodedJson, transactions);
@@ -29,16 +29,22 @@ void _handleResponse(
   }
 }
 
-class LoggingInterceptor implements InterceptorContract {
-  @override
-  Future<RequestData> interceptRequest({required RequestData data}) async {
-    print(data);
-    return data;
-  }
+Future<Transaction> saveTransaction(Transaction transaction) async {
+  final Map<String, dynamic> transactionMap = {
+    'value': transaction.value,
+    'contact': {
+      'name': transaction.contact.name,
+      'accountNumber': transaction.contact.accountNumber
+    }
+  };
 
-  @override
-  Future<ResponseData> interceptResponse({required ResponseData data}) async {
-    print(data);
-    return data;
-  }
+  final String transactionJson = jsonEncode(transactionMap);
+
+  final Response response = await client.post(Uri.parse(baseUrl),
+      headers: {'Content-type': 'application/json', 'password': '1000'},
+      body: transactionJson);
+
+  Map<String, dynamic> json = jsonDecode(response.body);
+  return Transaction(json['value'],
+      Contact(0, json['contact']['name'], json['contact']['accountNumber']));
 }
